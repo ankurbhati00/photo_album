@@ -1,0 +1,26 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+#header{
+    background-color: rgb(158, 158, 203);
+    display: flex;
+    padding: 10px;
+}
+
+#logo_text{
+    display: inline-block;
+    width: 200px;
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+    padding-top: 10px;
+}
+
+#img{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    /* margin-top: -10px; */
+}
