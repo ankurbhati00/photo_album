@@ -1,0 +1,126 @@
+#create_album_container {
+    background-color: rgb(237, 228, 217);
+    height: 17vh;
+    width: 60vw;
+    margin: auto;
+    margin-top: 4vh;
+    border-radius: 5px;
+    box-shadow: 1px 3px 8px .2px rgb(205, 201, 201);
+}
+
+#create_album_container>h1 {
+    font-size: 2.3rem;
+    padding: 10px 0 10px 30px;
+    font-family: var(--theme-font);
+}
+
+#album_input {
+    height: 40px;
+    width: 30vw;
+    margin-left: 3vw;
+    font-size: 1.3rem;
+    padding-left: 20px;
+    font-family: var(--theme-font);
+    letter-spacing: 1px;
+    border-radius: 20px;
+    /* border: 1px solid black; */
+    border: none;
+    background-color: whitesmoke;
+}
+
+#album_input:focus {
+    outline: .1px solid rgb(132, 132, 236);
+}
+
+#clear_btn,
+#create_btn {
+    height: 35px;
+    width: 100px;
+    background-color: red;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    margin: 4px;
+    cursor: pointer;
+    box-shadow: 1px 3px 8px .2px rgb(205, 201, 201);
+}
+
+#create_btn {
+    background-color: rgb(103, 103, 220);
+}
+
+#clear_btn {
+    margin-left: 10vw;
+}
+
+
+/* card list header */
+:root {
+    --theme-font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#album_list_container {
+    margin-top: 2vh;
+}
+
+#your_albums_text {
+    display: inline-block;
+    width: 70vw;
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-family: var(--theme-font);
+    margin-left: 10vw;
+}
+
+#add_album, #cancel_btn {
+    display: inline-block;
+    height: 30px;
+    width: 130px;
+    background-color: rgba(198, 254, 254, 0.904);
+    font-size: large;
+    border-radius: 5px;
+    color: rgb(134, 134, 250);
+    font-weight: 700;
+    border: 1px solid rgb(165, 165, 238);
+    cursor: pointer;
+}
+
+#cancel_btn{
+    background-color: rgba(255, 19, 0, .1);
+    border: 2px solid #ff1300;
+    color: #ff1300;
+}
+
+#plus_icon {
+    font-size: 1.3rem;
+    padding-right: 2px;
+}
+
+#back_btn {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    box-shadow: 1px 3px 8px .2px rgb(205, 201, 201);
+    color: black;
+    padding: 10px;
+    margin-left: 12vw;
+}
+
+#images_in_album {
+    display: inline-block;
+    width: 60vw;
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-family: var(--theme-font);
+    margin-left: 2vw;
+}
+
+/* card list container */
+#card_list_container{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 50px;
+        margin:20px 190px;
+}

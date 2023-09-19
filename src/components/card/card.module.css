@@ -1,0 +1,23 @@
+
+#container{
+    display: inline-block;
+    height:200px;
+    width: 200px;
+    background-color: rgb(243, 232, 232);
+    padding: 10px 10px 30px 10px;
+    border-radius: 5px;
+}
+
+
+
+#container:hover{
+    background-color: rgb(120, 120, 231);
+    color: white
+    
+}
+
+#image{
+height: 180px;
+width: 200px;
+border-radius: 5px 0px;
+}
