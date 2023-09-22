@@ -1,7 +1,13 @@
 import Image from "../Image/image";
 import imageListStyle from "./imageListStyle.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faAnglesLeft,
+  faAnglesRight,
+  faX,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 import { addDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import db from "../../firebaseInit";
@@ -10,6 +16,7 @@ export default function ImageList({ setView, currentAlbum }) {
   const [addImage, setAddImage] = useState(false);
   const [editImage, setEditImage] = useState(null);
   const [imagesData, setImagesData] = useState([]);
+  const [carousel, setCarousel] = useState({ hidden: true, currentPos: 0 });
 
   const imageNameRef = useRef();
   const imageUrlRef = useRef();
@@ -65,6 +72,7 @@ export default function ImageList({ setView, currentAlbum }) {
     }).catch((err) => console.log(err));
   }
 
+  // blow here are components--------->
   function AddImageCard() {
     return (
       <div id={imageListStyle.create_image_container}>
@@ -97,6 +105,46 @@ export default function ImageList({ setView, currentAlbum }) {
           </button>
         )}
       </div>
+    );
+  }
+
+  function ImagesCarousel() {
+    return (
+      <>
+        <div id={imageListStyle.carouselContainer}>
+          <FontAwesomeIcon
+            icon={faAnglesLeft}
+            id={imageListStyle.faAnglesLeft}
+            onClick={() => {
+              let i = carousel.currentPos;
+              if (--i < 0) {
+                i = imagesData.length - 1;
+              }
+              setCarousel({ hidden: false, currentPos: i });
+            }}
+          />
+          <img
+            id={imageListStyle.carouselImage}
+            src={imagesData[carousel.currentPos].url}
+          />
+          <FontAwesomeIcon
+            icon={faX}
+            id={imageListStyle.faX}
+            onClick={() => setCarousel({ hidden: true, currentPos: 0 })}
+          />
+          <FontAwesomeIcon
+            icon={faAnglesRight}
+            id={imageListStyle.faAnglesRight}
+            onClick={() => {
+              let i = carousel.currentPos;
+              if (++i > imagesData.length - 1) {
+                i = 0;
+              }
+              setCarousel({ hidden: false, currentPos: i });
+            }}
+          />
+        </div>
+      </>
     );
   }
 
@@ -145,9 +193,12 @@ export default function ImageList({ setView, currentAlbum }) {
             setEditImage={setEditImage}
             imageData={{ index, ...image }}
             deleteImage={deleteImage}
+            setCarousel={setCarousel}
           />
         ))}
       </div>
+      {/* images Carousel */}
+      {!carousel.hidden && <ImagesCarousel />}
     </>
   );
 }

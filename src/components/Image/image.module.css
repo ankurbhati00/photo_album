@@ -27,7 +27,7 @@
     text-align: center;
 }
 
-#faPen, #faDeleteLeft{
+#faPen, #faTrashCan{
     visibility: hidden;
     height: 20px;
     width: 20px;
@@ -40,19 +40,19 @@
     background-color: rgb(114, 114, 231);
 }
 
-#faDeleteLeft{
+#faTrashCan{
     background-color: orange;
     right: 5px;
 }
 
 #faPen:hover,
-#faDeleteLeft:hover{
+#faTrashCan:hover{
     visibility: visible ;
     transform: scale(1.2);
 }
 
 #image_container:hover> #faPen,
-#image_container:hover> #faDeleteLeft {
+#image_container:hover> #faTrashCan {
     visibility: visible;
 
 }

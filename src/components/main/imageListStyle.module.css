@@ -134,3 +134,43 @@
         margin: 30px 12vw 0px 12vw;
 
 }
+
+
+/* images carousel styles */
+
+#carouselContainer{
+    display: flex;
+    inset: 0;
+    background-color: rgba(0, 0, 0, .5);
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+   
+}
+
+#carouselImage{
+    height: 85%;
+    width: 75%;
+    margin:0px 50px ;
+    
+}
+
+#faAnglesLeft, #faAnglesRight,#faX{
+    height: 40px;
+    width: 40px;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 1px 3px 8px .2px rgb(205, 201, 201);
+    padding: 10px;
+}
+
+#faX{
+    position: absolute;
+    right: 20px;
+    top:20px;
+}
+
+ #faAnglesLeft, #faAnglesRight{
+     align-self: center;
+     }
