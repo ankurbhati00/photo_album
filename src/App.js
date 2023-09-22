@@ -5,15 +5,17 @@ import { useState } from "react";
 
 function App() {
   const [view, setView] = useState('albums');
-
+  const [currentAlbum, setCurrentAlbum] = useState(null);
   
 
   
   return (
     <>
       <Navbar />
-      {view === "albums" && <AlbumsList setView={setView} />}
-      {view === "images" && <ImageList setView={setView} />}
+      {view === "albums" && (
+        <AlbumsList setView={setView} setCurrentAlbum={setCurrentAlbum} />
+      )}
+      {view === "images" && <ImageList setView={setView} currentAlbum={currentAlbum } />}
     </>
   );
 }
