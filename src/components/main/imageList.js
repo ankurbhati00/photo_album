@@ -7,6 +7,8 @@ import {
   faAnglesRight,
   faX,
   faPlus,
+  faCircleXmark,
+  faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 import { addDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
@@ -17,9 +19,13 @@ export default function ImageList({ setView, currentAlbum }) {
   const [editImage, setEditImage] = useState(null);
   const [imagesData, setImagesData] = useState([]);
   const [carousel, setCarousel] = useState({ hidden: true, currentPos: 0 });
+  const [searchVisible, clickSearch] = useState(false);
+  const [searchResult, setSearchReslt] = useState(null);
 
   const imageNameRef = useRef();
   const imageUrlRef = useRef();
+  const searchInput = useRef();
+
   useEffect(() => {
     if (editImage) {
       console.log(editImage);
@@ -37,6 +43,20 @@ export default function ImageList({ setView, currentAlbum }) {
 
   function clearInputs() {
     setEditImage(null);
+  }
+
+  function handleOnChange(e) {
+    let searchedImages = [];
+    imagesData.forEach((img) => {
+      if (String(img.name).includes(e.target.value)) {
+        searchedImages.push(img);
+      }
+    });
+    if (searchedImages.length > 0) {
+      setSearchReslt(searchedImages);
+    } else {
+      setSearchReslt([]);
+    }
   }
 
   async function addImageToDb() {
@@ -162,6 +182,42 @@ export default function ImageList({ setView, currentAlbum }) {
             ? "No images found in the album."
             : `Images in album ${currentAlbum.albumName}`}
         </div>
+        {/* SEARCH IMAGE */}
+        <div id={imageListStyle.searchContainer}>
+          <input
+            type="text"
+            placeholder="Search..."
+            id={imageListStyle.inputSearch}
+            onChange={handleOnChange}
+            ref={searchInput}
+            style={
+              searchVisible
+                ? { visibility: "visible" }
+                : { visibility: "hidden" }
+            }
+          />
+          <FontAwesomeIcon
+            icon={faCircleXmark}
+            id={imageListStyle.faCircleXmark}
+            style={
+              searchVisible ? { display: "inline-block" } : { display: "none" }
+            }
+            onClick={() => {
+              clickSearch(!searchVisible);
+              setSearchReslt(null);
+              searchInput.current.value = "";
+            }}
+          />
+          <FontAwesomeIcon
+            icon={faMagnifyingGlass}
+            id={imageListStyle.faMagnifyingGlass}
+            style={
+              !searchVisible ? { display: "inline-block" } : { display: "none" }
+            }
+            onClick={() => clickSearch(!searchVisible)}
+          />
+        </div>
+
         {/* ADD IMAGE BUTTON */}
         {!addImage && (
           <button
@@ -188,14 +244,23 @@ export default function ImageList({ setView, currentAlbum }) {
       </div>
       {/* photos list */}
       <div id={imageListStyle.imageListContainer}>
-        {imagesData.map((image, index) => (
-          <Image
-            setEditImage={setEditImage}
-            imageData={{ index, ...image }}
-            deleteImage={deleteImage}
-            setCarousel={setCarousel}
-          />
-        ))}
+        {searchResult
+          ? searchResult.map((image, index) => (
+              <Image
+                setEditImage={setEditImage}
+                imageData={{ index, ...image }}
+                deleteImage={deleteImage}
+                setCarousel={setCarousel}
+              />
+            ))
+          : imagesData.map((image, index) => (
+              <Image
+                setEditImage={setEditImage}
+                imageData={{ index, ...image }}
+                deleteImage={deleteImage}
+                setCarousel={setCarousel}
+              />
+            ))}
       </div>
       {/* images Carousel */}
       {!carousel.hidden && <ImagesCarousel />}

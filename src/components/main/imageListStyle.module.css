@@ -68,14 +68,6 @@
     margin-top: 2vh;
 }
 
-#your_image_text{
-    display: inline-block;
-    width: 70vw;
-    font-size: 2.5rem;
-    font-weight: 700;
-    font-family:var(--theme-font);
-    margin-left: 10vw;
-}
     #add_image, #cancel_btn{
         display: inline-block;
         height: 30px;
@@ -111,13 +103,38 @@
 
     #images_in_album{
         display: inline-block;
-        width: 60vw;
+        width: 45vw;
         font-size: 2.5rem;
         font-weight: 700;
         font-family: var(--theme-font);
-        margin-left: 2vw;
-        text-align: center;
+        margin-left: 5vw;
+        /* text-align: center; */
     }
+
+/* search images */
+#searchContainer{
+    display: inline-block;
+    margin-right: 20px;
+}
+
+#inputSearch{
+    height: 30px;
+    width: 11vw;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    font-size: 1.3rem;
+    padding: 4px 6px;
+    outline: none;
+    border: 1px solid black;
+    font-family: "Poppins", sans-serif;
+}
+
+
+#faCircleXmark, #faMagnifyingGlass{
+    font-size: 2rem;
+    margin:0px 4px -3px 4px;
+}
+
 
 
 /* image list container */
