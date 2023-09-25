@@ -8,7 +8,7 @@ function App() {
   const [currentAlbum, setCurrentAlbum] = useState(null);
   
 
-  
+  // render pages based on condition
   return (
     <>
       <Navbar />

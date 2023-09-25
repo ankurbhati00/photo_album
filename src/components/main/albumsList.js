@@ -11,6 +11,7 @@ export default function AlbumsList({ setView, setCurrentAlbum }) {
   const [albumList, setAlbumList] = useState([]);
   const albumRef = useRef();
 
+  // update the albumlist 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "photo-album"), (snapshot) => {
       const albums = snapshot.docs.map((doc) => {
@@ -24,7 +25,8 @@ export default function AlbumsList({ setView, setCurrentAlbum }) {
       setAddAlbum(false);
     });
   }, []);
-
+  
+// add the albums to firebase
   async function addAlbumToDB() {
     const albumName = albumRef.current.value;
     if (albumName) {
@@ -39,11 +41,12 @@ export default function AlbumsList({ setView, setCurrentAlbum }) {
     }
   }
 
+  // clear inputs
   function clearInput() {
     albumRef.current.value = "";
   }
 
-  // this is an AddAlbumCard Element
+  // this is an AddAlbumCard Element--------->
   function AddAlbumCard() {
     return (
       <div id={albumsListStyle.create_album_container}>

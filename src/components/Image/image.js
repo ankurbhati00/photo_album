@@ -17,6 +17,7 @@ export default function Image({ setEditImage, imageData, deleteImage, setCarouse
     }
   })();
 
+  // edit image using states
   function editImage() {
     setEditImage({
       name: imageData.name,
@@ -38,6 +39,7 @@ export default function Image({ setEditImage, imageData, deleteImage, setCarouse
           id={imageStyle.faTrashCan}
           onClick={() => deleteImage(imageData.index)}
         />
+        {/* change images on click on carousel button */}
         <img id={imageStyle.image} src={imageUrl} alt="avatar" onClick={()=>setCarousel({hidden:false, currentPos:imageData.index})}/>
         <h2 id={imageStyle.image_name}>{imageData.name}</h2>
       </div>

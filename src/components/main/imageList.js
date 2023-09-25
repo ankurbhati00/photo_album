@@ -19,20 +19,21 @@ export default function ImageList({ setView, currentAlbum }) {
   const [editImage, setEditImage] = useState(null);
   const [imagesData, setImagesData] = useState([]);
   const [carousel, setCarousel] = useState({ hidden: true, currentPos: 0 });
-  const [searchVisible, clickSearch] = useState(false);
-  const [searchResult, setSearchReslt] = useState(null);
+  const [searchVisible, clickSearch] = useState(false);  //state  for toggle visible search input elm for image search
+  const [searchResult, setSearchReslt] = useState(null); //set found images to searchreasult to preview
 
   const imageNameRef = useRef();
   const imageUrlRef = useRef();
   const searchInput = useRef();
 
+  //if editimage has something to edit show edit form
   useEffect(() => {
     if (editImage) {
-      console.log(editImage);
       setAddImage(true);
     }
   }, [editImage]);
 
+  //update images array to show after any changes in db and 
   useEffect(() => {
     onSnapshot(doc(db, "photo-album", currentAlbum.albumId), (doc) => {
       setImagesData(doc.data().images);
@@ -41,10 +42,12 @@ export default function ImageList({ setView, currentAlbum }) {
     setAddImage(false);
   }, []);
 
+  //clear input tags after clicking the clear button
   function clearInputs() {
     setEditImage(null);
   }
 
+  //find the search images into the state db
   function handleOnChange(e) {
     let searchedImages = [];
     imagesData.forEach((img) => {
@@ -53,6 +56,7 @@ export default function ImageList({ setView, currentAlbum }) {
       }
     });
     if (searchedImages.length > 0) {
+      //if images found set the images to state image array
       setSearchReslt(searchedImages);
     } else {
       setSearchReslt([]);
@@ -72,11 +76,12 @@ export default function ImageList({ setView, currentAlbum }) {
   }
 
   async function updateImage() {
-    console.log(editImage);
     let name = imageNameRef.current.value;
     let url = imageUrlRef.current.value;
     if (name && url) {
+      //remove the image from state db and add updated image
       imagesData.splice(editImage.index, 1, { name, url });
+      //set the new image as updated image in db
       await updateDoc(doc(db, "photo-album", currentAlbum.albumId), {
         images: imagesData,
       }).catch((err) => console.log(err));
@@ -85,6 +90,7 @@ export default function ImageList({ setView, currentAlbum }) {
     }
   }
 
+  //delete image from the imagesData state and set Imagesdata into db
   async function deleteImage(i) {
     imagesData.splice(i, 1);
     await updateDoc(doc(db, "photo-album", currentAlbum.albumId), {
@@ -128,6 +134,7 @@ export default function ImageList({ setView, currentAlbum }) {
     );
   }
 
+  // carousel for images preview-------->
   function ImagesCarousel() {
     return (
       <>
@@ -135,6 +142,7 @@ export default function ImageList({ setView, currentAlbum }) {
           <FontAwesomeIcon
             icon={faAnglesLeft}
             id={imageListStyle.faAnglesLeft}
+            // handle the button click logic of carousel for previous image
             onClick={() => {
               let i = carousel.currentPos;
               if (--i < 0) {
@@ -145,16 +153,19 @@ export default function ImageList({ setView, currentAlbum }) {
           />
           <img
             id={imageListStyle.carouselImage}
+            // set src to current image for preview
             src={imagesData[carousel.currentPos].url}
           />
           <FontAwesomeIcon
             icon={faX}
             id={imageListStyle.faX}
+            //hide the carousel after clicking faX button 
             onClick={() => setCarousel({ hidden: true, currentPos: 0 })}
           />
           <FontAwesomeIcon
             icon={faAnglesRight}
             id={imageListStyle.faAnglesRight}
+            // handle the button click logic of carousel for next image
             onClick={() => {
               let i = carousel.currentPos;
               if (++i > imagesData.length - 1) {
@@ -178,11 +189,12 @@ export default function ImageList({ setView, currentAlbum }) {
           onClick={() => setView("albums")}
         />
         <div id={imageListStyle.images_in_album}>
+          {/* if no images in the db change the header text */}
           {imagesData.length < 1
             ? "No images found in the album."
             : `Images in album ${currentAlbum.albumName}`}
         </div>
-        {/* SEARCH IMAGE */}
+        {/* SEARCH IMAGE  CONTAINER*/}
         <div id={imageListStyle.searchContainer}>
           <input
             type="text"
@@ -190,6 +202,7 @@ export default function ImageList({ setView, currentAlbum }) {
             id={imageListStyle.inputSearch}
             onChange={handleOnChange}
             ref={searchInput}
+            // change the input tag visiblity after button click
             style={
               searchVisible
                 ? { visibility: "visible" }
@@ -199,6 +212,7 @@ export default function ImageList({ setView, currentAlbum }) {
           <FontAwesomeIcon
             icon={faCircleXmark}
             id={imageListStyle.faCircleXmark}
+            // hide or show the cross button 
             style={
               searchVisible ? { display: "inline-block" } : { display: "none" }
             }
@@ -211,6 +225,7 @@ export default function ImageList({ setView, currentAlbum }) {
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
             id={imageListStyle.faMagnifyingGlass}
+            // hide or show the search button
             style={
               !searchVisible ? { display: "inline-block" } : { display: "none" }
             }
