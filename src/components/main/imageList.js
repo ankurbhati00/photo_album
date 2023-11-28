@@ -1,6 +1,10 @@
 import Image from "../Image/image";
 import imageListStyle from "./imageListStyle.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
+import 'dotenv/config';
+console.log(process.env);
+
 import {
   faArrowLeft,
   faAnglesLeft,
@@ -19,11 +23,11 @@ export default function ImageList({ setView, currentAlbum }) {
   const [editImage, setEditImage] = useState(null);
   const [imagesData, setImagesData] = useState([]);
   const [carousel, setCarousel] = useState({ hidden: true, currentPos: 0 });
-  const [searchVisible, clickSearch] = useState(false);  //state  for toggle visible search input elm for image search
+  const [searchVisible, clickSearch] = useState(false); //state  for toggle visible search input elm for image search
   const [searchResult, setSearchReslt] = useState(null); //set found images to searchreasult to preview
-
+  const [file, setFile] = useState(null);
   const imageNameRef = useRef();
-  const imageUrlRef = useRef();
+  const imageFileRef = useRef();
   const searchInput = useRef();
 
   //if editimage has something to edit show edit form
@@ -33,7 +37,7 @@ export default function ImageList({ setView, currentAlbum }) {
     }
   }, [editImage]);
 
-  //update images array to show after any changes in db and 
+  //update images array to show after any changes in db and
   useEffect(() => {
     onSnapshot(doc(db, "photo-album", currentAlbum.albumId), (doc) => {
       setImagesData(doc.data().images);
@@ -66,21 +70,35 @@ export default function ImageList({ setView, currentAlbum }) {
   async function addImageToDb() {
     // add new image to db here
     let name = imageNameRef.current.value;
-    let url = imageUrlRef.current.value;
-    if (name && url) {
-      await updateDoc(doc(db, "photo-album", currentAlbum.albumId), {
-        images: [{ name, url }, ...imagesData],
-      }).catch((err) => console.log(err));
+    let file = imageFileRef.current.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+
+    if (name && file) {
+      await axios
+        .post("http://localhost:8182/api/upload", formData, {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        })
+        .then(async (res) => {
+          console.log("res ", res.data.name);
+          const filePath = process.env.apiurl||"http://localhost:8182/api/image/" + res.data.name;
+          await updateDoc(doc(db, "photo-album", currentAlbum.albumId), {
+            images: [{ name, url:filePath }, ...imagesData],
+          });
+        })
+        .catch((err) => console.log(err));
       setAddImage(false);
     }
   }
-
+ 
   async function updateImage() {
     let name = imageNameRef.current.value;
-    let url = imageUrlRef.current.value;
-    if (name && url) {
+    if (name ) {
       //remove the image from state db and add updated image
-      imagesData.splice(editImage.index, 1, { name, url });
+      let url = imagesData[editImage.index].url;
+      imagesData.splice(editImage.index, 1, {name, url});
       //set the new image as updated image in db
       await updateDoc(doc(db, "photo-album", currentAlbum.albumId), {
         images: imagesData,
@@ -93,6 +111,8 @@ export default function ImageList({ setView, currentAlbum }) {
   //delete image from the imagesData state and set Imagesdata into db
   async function deleteImage(i) {
     imagesData.splice(i, 1);
+  
+
     await updateDoc(doc(db, "photo-album", currentAlbum.albumId), {
       images: imagesData,
     }).catch((err) => console.log(err));
@@ -112,10 +132,10 @@ export default function ImageList({ setView, currentAlbum }) {
         />
         <input
           id={imageListStyle.image_input}
-          type="text"
-          ref={imageUrlRef}
-          placeholder="Url"
-          defaultValue={editImage?.url}
+          type="file"
+          ref={imageFileRef}
+          placeholder="file"
+          defaultValue={editImage?.file}
         />
         <button id={imageListStyle.clear_btn} onClick={clearInputs}>
           Clear
@@ -126,7 +146,7 @@ export default function ImageList({ setView, currentAlbum }) {
           </button>
         )}
         {editImage && (
-          <button id={imageListStyle.create_btn} onClick={updateImage}>
+          <button id={imageListStyle.create_btn} onClick={()=>updateImage()}>
             Update
           </button>
         )}
@@ -159,7 +179,7 @@ export default function ImageList({ setView, currentAlbum }) {
           <FontAwesomeIcon
             icon={faX}
             id={imageListStyle.faX}
-            //hide the carousel after clicking faX button 
+            //hide the carousel after clicking faX button
             onClick={() => setCarousel({ hidden: true, currentPos: 0 })}
           />
           <FontAwesomeIcon
@@ -212,7 +232,7 @@ export default function ImageList({ setView, currentAlbum }) {
           <FontAwesomeIcon
             icon={faCircleXmark}
             id={imageListStyle.faCircleXmark}
-            // hide or show the cross button 
+            // hide or show the cross button
             style={
               searchVisible ? { display: "inline-block" } : { display: "none" }
             }

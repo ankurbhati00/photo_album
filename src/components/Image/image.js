@@ -9,6 +9,7 @@ export default function Image({ setEditImage, imageData, deleteImage, setCarouse
   let imageUrl ="https://t3.ftcdn.net/jpg/03/93/13/46/360_F_393134695_XFGri3Y1DKu71d5LVRd0krpKpvFu6U1U.jpg";
   (() => {
     try {
+      console.log('image url ', imageData.url);
        new URL(imageData.url);
        imageUrl = imageData.url;
       
